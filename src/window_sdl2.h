@@ -23,7 +23,6 @@ private:
     bool captured;
     SDL_Window *window;
     SDL_GLContext context;
-
 public:
 
     SDL2GameWindow(const std::string& title, int width, int height, GraphicsApi api);
@@ -31,6 +30,8 @@ public:
     ~SDL2GameWindow() override;
 
     void setIcon(std::string const& iconPath) override;
+
+    void makeCurrent(bool active) override;
 
     void show() override;
 
