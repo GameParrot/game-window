@@ -18,7 +18,7 @@ private:
     int width = -1, height = -1;
     // width and height in window coordinates = pixels / relativeScale
     int windowedWidth = -1, windowedHeight = -1;
-    int relativeScale;
+    double relativeScale;
     bool resized = false;
     bool focused = true;
     bool warnedButtons = false;
@@ -59,7 +59,7 @@ public:
 
     void makeCurrent(bool active) override;
 
-    int getRelativeScale() const;
+    double getRelativeScale() const;
 
     void setRelativeScale();
 

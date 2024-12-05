@@ -88,14 +88,14 @@ void GLFWGameWindow::setRelativeScale() {
     int wx, wy;
     glfwGetWindowSize(window, &wx, &wy);
 
-    relativeScale = (int) floor(((fx / wx) + (fy / wy)) / 2);
+    relativeScale = (((double) fx / (double) wx) + ((double) fy / (double) wy)) / 2.0;
     // Update window size to match content size mismatch
     width = fx;
     height = fy;
     resized = true;
 }
 
-int GLFWGameWindow::getRelativeScale() const {
+double GLFWGameWindow::getRelativeScale() const {
     return relativeScale;
 }
 
@@ -134,8 +134,8 @@ void GLFWGameWindow::pollEvents() {
         if(requestFullscreen) {
             glfwGetWindowPos(window, &windowedX, &windowedY);
             // convert pixels to window coordinates getRelativeScale() is 2 on macOS retina screens
-            windowedWidth = width / getRelativeScale();
-            windowedHeight = height / getRelativeScale();
+            windowedWidth = (int) floor(width / getRelativeScale());
+            windowedHeight = (int) floor(height / getRelativeScale());
             GLFWmonitor* monitor = glfwGetPrimaryMonitor();
             int nModes = 0;
             auto modes = glfwGetVideoModes(monitor, &nModes);
