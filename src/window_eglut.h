@@ -38,6 +38,7 @@ private:
     static void _eglutTouchUpdateFunc(int id, double x, double y);
     static void _eglutTouchEndFunc(int id, double x, double y);
     static void _eglutKeyboardFunc(char str[5], int action);
+    static void _eglutDropFunc(const char* path);
     static void _eglutKeyboardSpecialFunc(int key, int action);
     static void _eglutPasteFunc(const char* str, int len);
     static void _eglutFocusFunc(int action);

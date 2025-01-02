@@ -272,6 +272,9 @@ void SDL3GameWindow::pollEvents() {
         case SDL_EVENT_TEXT_INPUT:
             onKeyboardText(ev.text.text ? ev.text.text : "");
             break;
+        case SDL_EVENT_DROP_FILE:
+            onDrop(ev.drop.data);
+            break;
         case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
             onClose();
             break;
