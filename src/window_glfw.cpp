@@ -50,6 +50,7 @@ GLFWGameWindow::GLFWGameWindow(const std::string& title, int width, int height, 
     glfwSetWindowCloseCallback(window, _glfwWindowCloseCallback);
     glfwSetKeyCallback(window, _glfwKeyCallback);
     glfwSetCharCallback(window, _glfwCharCallback);
+    glfwSetDropCallback(window, _glfwDropCallback);
     glfwSetWindowFocusCallback(window, _glfwWindowFocusCallback);
     glfwSetWindowContentScaleCallback(window, _glfwWindowContentScaleCallback);
     glfwMakeContextCurrent(window);
@@ -426,6 +427,13 @@ void GLFWGameWindow::_glfwCharCallback(GLFWwindow* window, unsigned int ch) {
     GLFWGameWindow* user = (GLFWGameWindow*) glfwGetWindowUserPointer(window);
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
     user->onKeyboardText(cvt.to_bytes(ch));
+}
+
+void GLFWGameWindow::_glfwDropCallback(GLFWwindow* window, int count, const char** paths) {
+    GLFWGameWindow* user = (GLFWGameWindow*) glfwGetWindowUserPointer(window);
+    for (int i = 0; i < count; i++) {
+        user->onDrop(std::string(paths[i]));
+    }
 }
 
 void GLFWGameWindow::_glfwWindowCloseCallback(GLFWwindow* window) {

@@ -36,6 +36,7 @@ EGLUTWindow::EGLUTWindow(const std::string& title, int width, int height, Graphi
     eglutTouchUpdateFunc(_eglutTouchUpdateFunc);
     eglutTouchEndFunc(_eglutTouchEndFunc);
     eglutKeyboardFunc(_eglutKeyboardFunc);
+    eglutDropFunc(_eglutDropFunc);
     eglutSpecialFunc(_eglutKeyboardSpecialFunc);
     eglutPasteFunc(_eglutPasteFunc);
     eglutFocusFunc(_eglutFocusFunc);
@@ -241,6 +242,12 @@ void EGLUTWindow::_eglutKeyboardFunc(char str[5], int action) {
         ss << str;
         currentWindow->onKeyboardText(ss.str());
     }
+}
+
+void EGLUTWindow::_eglutDropFunc(const char* path) {
+    if (currentWindow == nullptr)
+        return;
+    currentWindow->onDrop(path);
 }
 
 KeyCode EGLUTWindow::getKeyMinecraft(int keyCode) {

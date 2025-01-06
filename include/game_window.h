@@ -41,6 +41,7 @@ public:
     using TouchEndCallback = std::function<void (int, double, double)>;
     using KeyboardCallback = std::function<void (KeyCode, KeyAction)>;
     using KeyboardTextCallback = std::function<void (std::string const&)>;
+    using DropCallback = std::function<void (std::string const&)>;
     using PasteCallback = std::function<void (std::string const&)>;
     using GamepadStateCallback = std::function<void (int, bool)>;
     using GamepadButtonCallback = std::function<void (int, GamepadButtonId, bool)>;
@@ -58,6 +59,7 @@ private:
     TouchEndCallback touchEndCallback;
     KeyboardCallback keyboardCallback;
     KeyboardTextCallback keyboardTextCallback;
+    DropCallback dropCallback;
     PasteCallback pasteCallback;
     GamepadStateCallback gamepadStateCallback;
     GamepadButtonCallback gamepadButtonCallback;
@@ -131,6 +133,8 @@ public:
 
     void setKeyboardTextCallback(KeyboardTextCallback callback) { keyboardTextCallback = std::move(callback); }
 
+    void setDropCallback(DropCallback callback) { dropCallback = std::move(callback); }
+
     void setPasteCallback(PasteCallback callback) { pasteCallback = std::move(callback); }
 
     // Used when the cursor is disabled
@@ -190,6 +194,11 @@ protected:
     void onKeyboardText(std::string const& c) {
         if (keyboardTextCallback != nullptr)
             keyboardTextCallback(c);
+    }
+    void onDrop(std::string const& path) {
+        if (dropCallback != nullptr) {
+            dropCallback(path);
+        }
     }
     void onPaste(std::string const& c) {
         if (pasteCallback != nullptr)

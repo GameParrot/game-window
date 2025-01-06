@@ -45,6 +45,7 @@ private:
     static void _glfwScrollCallback(GLFWwindow* window, double x, double y);
     static void _glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void _glfwCharCallback(GLFWwindow* window, unsigned int ch);
+    static void _glfwDropCallback(GLFWwindow* window, int count, const char** paths);
     static void _glfwWindowCloseCallback(GLFWwindow* window);
     static void _glfwWindowFocusCallback(GLFWwindow* window, int focused);
     static void _glfwWindowContentScaleCallback(GLFWwindow* window, float scalex, float scaley);
