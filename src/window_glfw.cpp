@@ -216,24 +216,28 @@ void GLFWGameWindow::swapBuffers() {
 #ifdef GAMEWINDOW_X11_LOCK
     std::lock_guard<std::recursive_mutex> lock(x11_sync);
 #endif
+#ifdef __APPLE__
     if(swapInterval > 0 && brokenVSync) {
-        std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> waitTime = lastFrame + swapInterval * std::chrono::nanoseconds(1000000000 / 60);
+        std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> waitTime = lastFrame + swapInterval * std::chrono::nanoseconds(1000000000 / 120);
         lastFrame = std::chrono::system_clock::now();
-        std::this_thread::sleep_for(waitTime - lastFrame);
         glfwSwapBuffers(window);
+        std::this_thread::sleep_for(waitTime - lastFrame);
     } else if(swapInterval > 0 && checkBrokenVSync >= 0) {
         glfwSwapBuffers(window);
-        if(lastFrame + std::chrono::seconds(1) < std::chrono::system_clock::now()) {
+        if(lastFrame + std::chrono::seconds(5) < std::chrono::system_clock::now()) {
             checkBrokenVSync = -1;
         } else {
             checkBrokenVSync++;
-            if(checkBrokenVSync > 200) {
+            if(checkBrokenVSync > 256 * 5) {
                 brokenVSync = true;
             }
         }
     } else {
+#endif
         glfwSwapBuffers(window);
+#ifdef __APPLE__
     }
+#endif
 }
 
 void GLFWGameWindow::setSwapInterval(int interval) {
