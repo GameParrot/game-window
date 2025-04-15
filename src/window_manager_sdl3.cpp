@@ -1,6 +1,7 @@
 #include "window_manager_sdl3.h"
 #include "window_sdl3.h"
 #include <stdexcept>
+#include <fstream>
 
 #include <SDL3/SDL.h>
 
@@ -18,7 +19,23 @@ std::shared_ptr<GameWindow> SDL3WindowManager::createWindow(const std::string& t
 }
 
 void SDL3WindowManager::addGamepadMappingFile(const std::string &path) {
-    SDL_AddGamepadMappingsFromFile(path.data());
+    // Not using this due to regression with the Gamepad Tool and ignoring all mappings without platform tag followed by comma
+    // SDL_AddGamepadMappingsFromFile(path.data());
+    std::string plat = SDL_GetPlatform();
+    std::string platsearchpattern1 = ",platform:" + plat;
+    std::string platsearchpattern2 = platsearchpattern1 + ",";
+    std::ifstream fs(path);
+    if (!fs)
+        return;
+    std::string line;
+    int gamepads = 0;
+    while (std::getline(fs, line)) {
+        if (!line.empty() && (line.find(",platform:") == std::string::npos || line.find(platsearchpattern2) != std::string::npos || line.find(platsearchpattern1, line.size() - platsearchpattern1.size()) != std::string::npos)) {
+            if(SDL_AddGamepadMapping(line.data()) >= 0) {
+                gamepads++;
+            }
+        }
+    }
 }
 
 void SDL3WindowManager::addGamePadMapping(const std::string &content) {
