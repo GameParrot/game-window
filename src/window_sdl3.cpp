@@ -260,12 +260,19 @@ void SDL3GameWindow::pollEvents() {
             onGamepadButton(ev.gbutton.which, getKeyGamePad(ev.gbutton.button), ev.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);
             break;
         case SDL_EVENT_GAMEPAD_AXIS_MOTION:
-            onGamepadAxis(ev.gbutton.which, getAxisGamepad(ev.gbutton.button), ev.type == SDL_EVENT_GAMEPAD_BUTTON_DOWN);
+            onGamepadAxis(ev.gaxis.which, getAxisGamepad(ev.gaxis.axis), (float)ev.gaxis.value / 32767.0f );
             break;
         case SDL_EVENT_GAMEPAD_ADDED:
-        case SDL_EVENT_GAMEPAD_REMOVED:
+        case SDL_EVENT_GAMEPAD_REMOVED: {
+            if(ev.type == SDL_EVENT_GAMEPAD_ADDED) {
+                SDL_OpenGamepad(ev.gdevice.which);
+            }
             onGamepadState(ev.gdevice.which, ev.type == SDL_EVENT_GAMEPAD_ADDED);
+            if(ev.type == SDL_EVENT_GAMEPAD_REMOVED) {
+                SDL_CloseGamepad(SDL_GetGamepadFromID(ev.gdevice.which));
+            }
             break;
+        }
         case SDL_EVENT_WINDOW_RESIZED:
             setRelativeScale();
             break;
