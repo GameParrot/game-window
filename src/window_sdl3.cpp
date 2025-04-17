@@ -157,6 +157,10 @@ static GamepadAxisId getAxisGamepad(int btn) {
 }
 
 static int getMouseButton(int btn) {
+    if(btn >= SDL_BUTTON_X1) {
+        // To match glfw codebase
+        return 8 + btn - SDL_BUTTON_X1;
+    }
     switch (btn)
     {
     case SDL_BUTTON_LEFT:
@@ -165,10 +169,6 @@ static int getMouseButton(int btn) {
         return 2;
     case SDL_BUTTON_MIDDLE:
         return 3;
-    case SDL_BUTTON_X1:
-        return 4;
-    case SDL_BUTTON_X2:
-        return 5;
     default:
         return 0;
     }
