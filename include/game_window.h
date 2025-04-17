@@ -209,11 +209,11 @@ protected:
             gamepadStateCallback(id, connected);
     }
     void onGamepadButton(int id, GamepadButtonId btn, bool pressed) {
-        if (gamepadButtonCallback != nullptr)
+        if (gamepadButtonCallback != nullptr && btn != GamepadButtonId::UNKNOWN)
             gamepadButtonCallback(id, btn, pressed);
     }
     void onGamepadAxis(int id, GamepadAxisId axis, float val) {
-        if (gamepadAxisCallback != nullptr)
+        if (gamepadAxisCallback != nullptr && axis != GamepadAxisId::UNKNOWN)
             gamepadAxisCallback(id, axis, val);
     }
     void onClose() {
