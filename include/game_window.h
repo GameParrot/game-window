@@ -6,21 +6,43 @@
 #include "key_mapping.h"
 
 enum class GraphicsApi {
-    OPENGL, OPENGL_ES2
+    OPENGL,
+    OPENGL_ES2
 };
 enum class KeyAction {
-    PRESS, REPEAT, RELEASE
+    PRESS,
+    REPEAT,
+    RELEASE
 };
 enum class MouseButtonAction {
-    PRESS, RELEASE
+    PRESS,
+    RELEASE
 };
 enum class GamepadButtonId {
-    A, B, X, Y, LB, RB, BACK, START, GUIDE, LEFT_STICK, RIGHT_STICK,
-    DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT,
+    A,
+    B,
+    X,
+    Y,
+    LB,
+    RB,
+    BACK,
+    START,
+    GUIDE,
+    LEFT_STICK,
+    RIGHT_STICK,
+    DPAD_UP,
+    DPAD_RIGHT,
+    DPAD_DOWN,
+    DPAD_LEFT,
     UNKNOWN = -1
 };
 enum class GamepadAxisId {
-    LEFT_X, LEFT_Y, RIGHT_X, RIGHT_Y, LEFT_TRIGGER, RIGHT_TRIGGER,
+    LEFT_X,
+    LEFT_Y,
+    RIGHT_X,
+    RIGHT_Y,
+    LEFT_TRIGGER,
+    RIGHT_TRIGGER,
     UNKNOWN = -1
 };
 struct FullscreenMode {
@@ -29,24 +51,23 @@ struct FullscreenMode {
 };
 
 class GameWindow {
-
 public:
-    using DrawCallback = std::function<void ()>;
-    using WindowSizeCallback = std::function<void (int, int)>;
-    using MouseButtonCallback = std::function<void (double, double, int, MouseButtonAction)>;
-    using MousePositionCallback = std::function<void (double, double)>;
-    using MouseScrollCallback = std::function<void (double, double, double, double)>;
-    using TouchStartCallback = std::function<void (int, double, double)>;
-    using TouchUpdateCallback = std::function<void (int, double, double)>;
-    using TouchEndCallback = std::function<void (int, double, double)>;
-    using KeyboardCallback = std::function<void (KeyCode, KeyAction)>;
-    using KeyboardTextCallback = std::function<void (std::string const&)>;
-    using DropCallback = std::function<void (std::string const&)>;
-    using PasteCallback = std::function<void (std::string const&)>;
-    using GamepadStateCallback = std::function<void (int, bool)>;
-    using GamepadButtonCallback = std::function<void (int, GamepadButtonId, bool)>;
-    using GamepadAxisCallback = std::function<void (int, GamepadAxisId, float)>;
-    using CloseCallback = std::function<void ()>;
+    using DrawCallback = std::function<void()>;
+    using WindowSizeCallback = std::function<void(int, int)>;
+    using MouseButtonCallback = std::function<void(double, double, int, MouseButtonAction)>;
+    using MousePositionCallback = std::function<void(double, double)>;
+    using MouseScrollCallback = std::function<void(double, double, double, double)>;
+    using TouchStartCallback = std::function<void(int, double, double)>;
+    using TouchUpdateCallback = std::function<void(int, double, double)>;
+    using TouchEndCallback = std::function<void(int, double, double)>;
+    using KeyboardCallback = std::function<void(KeyCode, KeyAction, int)>;
+    using KeyboardTextCallback = std::function<void(std::string const&)>;
+    using DropCallback = std::function<void(std::string const&)>;
+    using PasteCallback = std::function<void(std::string const&)>;
+    using GamepadStateCallback = std::function<void(int, bool)>;
+    using GamepadButtonCallback = std::function<void(int, GamepadButtonId, bool)>;
+    using GamepadAxisCallback = std::function<void(int, GamepadAxisId, float)>;
+    using CloseCallback = std::function<void()>;
 
 private:
     DrawCallback drawCallback;
@@ -67,7 +88,6 @@ private:
     CloseCallback closeCallback;
 
 public:
-
     GameWindow(std::string const& title, int width, int height, GraphicsApi api) {}
 
     virtual ~GameWindow() {}
@@ -100,17 +120,21 @@ public:
     virtual void setSwapInterval(int interval) = 0;
 
     virtual void startTextInput() {}
-    
+
     virtual void stopTextInput() {}
 
     virtual void setFullscreenMode(const FullscreenMode& mode) {}
 
     virtual FullscreenMode getFullscreenMode() {
-        return { -1 };
+        return {-1};
     }
 
     virtual std::vector<FullscreenMode> getFullscreenModes() {
         return {};
+    }
+
+    virtual uint32_t getKeyFromKeyCode(KeyCode code, int metaState) {
+        return 0;
     }
 
     void setDrawCallback(DrawCallback callback) { drawCallback = std::move(callback); }
@@ -148,77 +172,74 @@ public:
 
     void setCloseCallback(CloseCallback callback) { closeCallback = std::move(callback); }
 
-
 protected:
-
     void onDraw() {
-        if (drawCallback != nullptr)
+        if(drawCallback != nullptr)
             drawCallback();
     }
     void onWindowSizeChanged(int w, int h) {
-        if (windowSizeCallback != nullptr)
+        if(windowSizeCallback != nullptr)
             windowSizeCallback(w, h);
     }
     void onMouseButton(double x, double y, int button, MouseButtonAction action) {
-        if (mouseButtonCallback != nullptr)
+        if(mouseButtonCallback != nullptr)
             mouseButtonCallback(x, y, button, action);
     }
     void onMousePosition(double x, double y) {
-        if (mousePositionCallback != nullptr)
+        if(mousePositionCallback != nullptr)
             mousePositionCallback(x, y);
     }
     void onMouseRelativePosition(double x, double y) {
-        if (mouseRelativePositionCallback != nullptr)
+        if(mouseRelativePositionCallback != nullptr)
             mouseRelativePositionCallback(x, y);
     }
     void onMouseScroll(double x, double y, double dx, double dy) {
-        if (mouseScrollCallback != nullptr)
+        if(mouseScrollCallback != nullptr)
             mouseScrollCallback(x, y, dx, dy);
     }
     void onTouchStart(int id, double x, double y) {
-        if (touchStartCallback != nullptr)
+        if(touchStartCallback != nullptr)
             touchStartCallback(id, x, y);
     }
     void onTouchUpdate(int id, double x, double y) {
-        if (touchUpdateCallback != nullptr)
+        if(touchUpdateCallback != nullptr)
             touchUpdateCallback(id, x, y);
     }
     void onTouchEnd(int id, double x, double y) {
-        if (touchEndCallback != nullptr)
+        if(touchEndCallback != nullptr)
             touchEndCallback(id, x, y);
     }
-    void onKeyboard(KeyCode key, KeyAction action) {
-        if (keyboardCallback != nullptr)
-            keyboardCallback(key, action);
+    void onKeyboard(KeyCode key, KeyAction action, int mods) {
+        if(keyboardCallback != nullptr)
+            keyboardCallback(key, action, mods);
     }
     void onKeyboardText(std::string const& c) {
-        if (keyboardTextCallback != nullptr)
+        if(keyboardTextCallback != nullptr)
             keyboardTextCallback(c);
     }
     void onDrop(std::string const& path) {
-        if (dropCallback != nullptr) {
+        if(dropCallback != nullptr) {
             dropCallback(path);
         }
     }
     void onPaste(std::string const& c) {
-        if (pasteCallback != nullptr)
+        if(pasteCallback != nullptr)
             pasteCallback(c);
     }
     void onGamepadState(int id, bool connected) {
-        if (gamepadStateCallback != nullptr)
+        if(gamepadStateCallback != nullptr)
             gamepadStateCallback(id, connected);
     }
     void onGamepadButton(int id, GamepadButtonId btn, bool pressed) {
-        if (gamepadButtonCallback != nullptr && btn != GamepadButtonId::UNKNOWN)
+        if(gamepadButtonCallback != nullptr && btn != GamepadButtonId::UNKNOWN)
             gamepadButtonCallback(id, btn, pressed);
     }
     void onGamepadAxis(int id, GamepadAxisId axis, float val) {
-        if (gamepadAxisCallback != nullptr && axis != GamepadAxisId::UNKNOWN)
+        if(gamepadAxisCallback != nullptr && axis != GamepadAxisId::UNKNOWN)
             gamepadAxisCallback(id, axis, val);
     }
     void onClose() {
-        if (closeCallback != nullptr)
+        if(closeCallback != nullptr)
             closeCallback();
     }
-
 };

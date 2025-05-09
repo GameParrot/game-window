@@ -9,7 +9,6 @@
 #include <chrono>
 
 class GLFWGameWindow : public GameWindow {
-
 private:
     GLFWwindow* window;
     double lastMouseX = 0.0, lastMouseY = 0.0;
@@ -25,7 +24,7 @@ private:
     bool requestFullscreen = false;
     bool pendingFullscreenModeSwitch = false;
     std::vector<FullscreenMode> modes;
-    FullscreenMode mode = { -1 }; 
+    FullscreenMode mode = {-1};
     std::chrono::time_point<std::chrono::system_clock> lastFrame;
     int swapInterval = 0;
     int checkBrokenVSync = 0;
@@ -38,6 +37,7 @@ private:
 #endif
 
     static KeyCode getKeyMinecraft(int keyCode);
+    static int translateMeta(unsigned int meta);
 
     static void _glfwWindowSizeCallback(GLFWwindow* window, int w, int h);
     static void _glfwCursorPosCallback(GLFWwindow* window, double x, double y);
@@ -51,7 +51,6 @@ private:
     static void _glfwWindowContentScaleCallback(GLFWwindow* window, float scalex, float scaley);
 
 public:
-
     GLFWGameWindow(const std::string& title, int width, int height, GraphicsApi api);
 
     ~GLFWGameWindow() override;

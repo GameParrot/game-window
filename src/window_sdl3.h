@@ -8,12 +8,14 @@
 #include <SDL3/SDL.h>
 
 class SDL3GameWindow : public GameWindow {
-
 private:
-    enum RequestWindowMode { Fullscreen, Windowed, None };
+    enum RequestWindowMode { Fullscreen,
+                             Windowed,
+                             None };
     SDL_Window* window;
     SDL_GLContext context;
-    double lastMouseX = 0.0, lastMouseY = 0.0;
+    bool cursorDisabled = false;
+    bool centerMouseNextEnable = false;
     int windowedX = -1, windowedY = -1;
     // width and height in content pixels
     int width = -1, height = -1;
@@ -29,10 +31,11 @@ private:
     FullscreenMode mode;
     std::vector<FullscreenMode> modes;
 
+    bool isMouseInWindow();
     static KeyCode getKeyMinecraft(int keyCode);
+    static int translateMeta(SDL_Keymod meta);
 
 public:
-
     SDL3GameWindow(const std::string& title, int width, int height, GraphicsApi api);
 
     ~SDL3GameWindow() override;
@@ -68,7 +71,7 @@ public:
     void setSwapInterval(int interval) override;
 
     void startTextInput() override;
-    
+
     void stopTextInput() override;
 
     void setFullscreenMode(const FullscreenMode& mode) override;
@@ -77,4 +80,5 @@ public:
 
     std::vector<FullscreenMode> getFullscreenModes() override;
 
+    uint32_t getKeyFromKeyCode(KeyCode code, int metaState) override;
 };
