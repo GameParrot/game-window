@@ -557,7 +557,7 @@ KeyCode SDL3GameWindow::getKeyMinecraft(int keyCode) {
     return KeyCode::UNKNOWN;
 }
 
-uint32_t SDL3GameWindow::getKeyFromKeyCode(KeyCode code, int metaState) {
+int SDL3GameWindow::getKeyFromKeyCode(KeyCode code, int metaState) {
     SDL_Scancode scancode = SDL_SCANCODE_UNKNOWN;
     if(code >= KeyCode::NUM_1 && code <= KeyCode::NUM_9)
         scancode = (SDL_Scancode)((int)code - (int)KeyCode::NUM_1 + SDL_SCANCODE_1);
