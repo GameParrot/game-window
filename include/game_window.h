@@ -133,7 +133,7 @@ public:
         return {};
     }
 
-    virtual uint32_t getKeyFromKeyCode(KeyCode code, int metaState) {
+    virtual int getKeyFromKeyCode(KeyCode code, int metaState) {
         return 0;
     }
 

@@ -80,5 +80,5 @@ public:
 
     std::vector<FullscreenMode> getFullscreenModes() override;
 
-    uint32_t getKeyFromKeyCode(KeyCode code, int metaState) override;
+    int getKeyFromKeyCode(KeyCode code, int metaState) override;
 };
