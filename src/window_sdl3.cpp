@@ -222,7 +222,7 @@ void SDL3GameWindow::pollEvents() {
             break;
         case SDL_EVENT_MOUSE_BUTTON_DOWN:
         case SDL_EVENT_MOUSE_BUTTON_UP:
-            onMouseButton(ev.button.x, ev.button.y, getMouseButton(ev.button.button), ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN ? MouseButtonAction::PRESS : MouseButtonAction::RELEASE);
+            onMouseButton(ev.button.x * relativeScaleX, ev.button.y * relativeScaleY, getMouseButton(ev.button.button), ev.type == SDL_EVENT_MOUSE_BUTTON_DOWN ? MouseButtonAction::PRESS : MouseButtonAction::RELEASE);
             break;
         case SDL_EVENT_FINGER_DOWN: {
             int w, h;
